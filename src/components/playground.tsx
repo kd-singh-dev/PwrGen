@@ -10,10 +10,21 @@ import DeployContract from "@/pwr/DeployContract";
 
 export function Playground() {
   const [inputValue, setInputValue] = useState("");
+  const [inputDisabled, setInputDisabled] = useState<boolean>(false);
   const { sendMessage } = useChatInteract();
   const { messages } = useChatMessages();
 
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Submit on Enter key press
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault() // Prevent new line in textarea
+      handleSendMessage()
+    }
+  }
+
   const handleSendMessage = () => {
+    setInputDisabled(true)
     const content = inputValue.trim();
     if (content) {
       const message = {
@@ -23,6 +34,7 @@ export function Playground() {
       };
       sendMessage(message, []);
       setInputValue("");
+      setInputDisabled(false)
     }
   };
 
@@ -47,31 +59,42 @@ export function Playground() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
+    <div className="bg-[#2d2d30] w-screen h-screen flex flex-col mb-12">
+
+      {/* //TODO: Ye set thk se laga lena kahi */}
+      <DeployContract></DeployContract>
       <div className="flex-1 overflow-auto p-6">
         <div className="space-y-4">
           {messages.map((message) => renderMessage(message))}
         </div>
       </div>
-      <div className="border-t p-4 bg-white dark:bg-gray-800">
-        <div className="flex items-center space-x-2">
-          <Input
-            autoFocus
-            className="flex-1"
-            id="message-input"
-            placeholder="Type a message"
+
+      <div className="fixed inset-x-0 bottom-0">
+        <div className="max-w-screen-lg m-auto w-full p-4 flex space-x-4 justify-center items-center" >
+          <textarea
+            rows={2}
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                handleSendMessage();
-              }
+            onChange={e => setInputValue(e.target.value)}
+            onKeyDown={handleKeyPress}
+            disabled={inputDisabled}
+            placeholder="Type a message..."
+            className="flex-1 py-2 px-3 rounded-lg border-none focus:outline-none focus:outline-none focus:border-[#3e3e42] bg-[#3e3e42] text-white resize-none"
+            style={{
+              opacity: inputDisabled ? 0.5 : 1,
+              cursor: inputDisabled ? 'not-allowed' : 'auto'
             }}
-          />
-          <DeployContract></DeployContract>
-          <Button onClick={handleSendMessage} type="submit">
+          ></textarea>
+          <button
+            onClick={handleSendMessage}
+            className="ml-2 bg-[#3e3e42] text-white py-2 px-4 rounded-full"
+            style={{
+              opacity: inputDisabled ? 0.5 : 1,
+              cursor: inputDisabled ? 'not-allowed' : 'auto'
+            }}
+          >
             Send
-          </Button>
+          </button>
+
         </div>
       </div>
     </div>
