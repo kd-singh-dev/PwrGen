@@ -4,7 +4,7 @@ import { solidityCompiler } from "@agnostico/browser-solidity-compiler";
 const DeployContract = () => {
     // @ts-ignore
     const provider = new ethers.BrowserProvider(window.ethereum);
-    
+
     const [contractAddress, setContractAddress] = useState<string>();
     const [errorMessage, setErrorMessage] = useState(null);
 
@@ -28,13 +28,13 @@ const DeployContract = () => {
         try {
             let options = {} as any;
             options.optimizer = {
-                    enabled: true,
-                    runs: 10,
+                enabled: true,
+                runs: 10,
             } as any;
-            
-            
-              
-            
+
+
+
+
             //   let index = trimContent.match(/contract/)?.index;
             // if(index==undefined){
             //     window.alert("Issue while parsing contract")
@@ -51,17 +51,17 @@ const DeployContract = () => {
             // console.log(contractName)
             let contractName = "SimpleStorage";
 
-            
+
             const output = await solidityCompiler({
                 version: `https://binaries.soliditylang.org/bin/soljson-v0.8.19+commit.7dd6d404.js`,
                 contractBody: trimContent,
                 options,
-              })as any;
-              console.log(output)
+            }) as any;
+            console.log(output)
             const abi = output.contracts.Compiled_Contracts[contractName].abi;
 
             const bytecode = output.contracts.Compiled_Contracts[contractName].evm.bytecode;
-            
+
             const signer = await provider.getSigner();
             console.log("2")
             const factory = new ethers.ContractFactory(abi, bytecode, signer);
@@ -75,7 +75,7 @@ const DeployContract = () => {
 
     return (
         <div>
-            <button onClick={compileAndDeploy}>Compile & Deploy Contract</button>
+            <button className='m-2 bg-[#3e3e42] text-white py-1  px-4 rounded-full' onClick={compileAndDeploy}>Compile & Deploy Contract</button>
             {contractAddress && <p>Contract deployed at: {contractAddress}</p>}
             {errorMessage && <p>Error: {errorMessage}</p>}
         </div>

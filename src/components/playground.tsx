@@ -50,19 +50,21 @@ export function Playground() {
     return (
       <div key={message.id} className="flex items-start space-x-2">
         <div className="w-20 text-sm text-green-500">{message.name}</div>
-        <div className="flex-1 border rounded-lg p-2">
-          <p className="text-black dark:text-white">{message.output}</p>
-          <small className="text-xs text-gray-500">{date}</small>
+        <div className="flex-1 bg-zinc-800 text-white rounded-lg p-2 break-words">
+          {/* //TODO: Ye set thk se laga lena kahi, make it conditional if not user then only render this*/}
+          <div className="float-right">
+            <DeployContract />
+          </div>
+          <p>{message.output}</p>
+          <small className="text-xs">{date}</small>
         </div>
+
       </div>
     );
   };
 
   return (
     <div className="bg-[#2d2d30] w-screen h-screen flex flex-col mb-12">
-
-      {/* //TODO: Ye set thk se laga lena kahi */}
-      <DeployContract></DeployContract>
       <div className="flex-1 overflow-auto p-6">
         <div className="space-y-4">
           {messages.map((message) => renderMessage(message))}
