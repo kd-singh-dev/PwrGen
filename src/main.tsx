@@ -5,7 +5,7 @@ import { RecoilRoot } from "recoil";
 import "./index.css";
 import { ChainlitAPI, ChainlitContext } from "@chainlit/react-client";
 
-const CHAINLIT_SERVER = "http://localhost:80/chainlit";
+const CHAINLIT_SERVER = "https://tracker.yashkumarverma.com/chainlit";
 
 const apiClient = new ChainlitAPI(CHAINLIT_SERVER, "webapp");
 

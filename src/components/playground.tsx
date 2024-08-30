@@ -1,11 +1,13 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Button } from "@/components/ui/button";
 import {
   useChatInteract,
   useChatMessages,
   IStep,
 } from "@chainlit/react-client";
 import { useState } from "react";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import DeployContract from "@/pwr/DeployContract";
 
 export function Playground() {
@@ -47,15 +49,25 @@ export function Playground() {
       undefined,
       dateOptions
     );
+    const containsSolidityCode = (paragraph: string) => {
+      return /pragma solidity\s+\^\d+\.\d+\.\d+;/.test(paragraph) && /contract\s+\w+\s*\{/.test(paragraph);
+    };
+
     return (
       <div key={message.id} className="flex items-start space-x-2">
         <div className="w-20 text-sm text-green-500">{message.name}</div>
         <div className="flex-1 bg-zinc-800 text-white rounded-lg p-2 break-words">
-          {/* //TODO: Ye set thk se laga lena kahi, make it conditional if not user then only render this*/}
-          <div className="float-right">
-            <DeployContract />
-          </div>
-          <p>{message.output}</p>
+          {containsSolidityCode(message.output) ? ( <div className="text-blue-200">
+          <DeployContract sourceCode={message.output.toString()} />
+            
+              <SyntaxHighlighter style={nightOwl} language="solidity">{message.output}</SyntaxHighlighter>
+           
+          </div>) : (
+            <p>{message.output}</p>
+          )
+          }
+
+          {/* <p>{message.output}</p> */}
           <small className="text-xs">{date}</small>
         </div>
 

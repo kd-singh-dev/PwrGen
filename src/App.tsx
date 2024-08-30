@@ -13,16 +13,9 @@ function App() {
     if (session?.socket.connected) {
       return;
     }
-    fetch("http://localhost:80/custom-auth")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        connect({
-          userEnv,
-          accessToken: `Bearer: ${data.token}`,
-        });
-      });
+    connect({
+      userEnv
+    })
   }, [connect]);
 
   return (
